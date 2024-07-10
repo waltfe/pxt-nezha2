@@ -1,32 +1,64 @@
-# NeZha V2 Package
+# NeZha V2 Expansion Pack
 
-![](./nezha_v2.png/)
+![NeZha V2 Expansion Board](nezha_v2.png)
 
-This extension is designed to programme and drive the NeZha micro:bit expansion board, You can [get NeZhaV2 from the Elecfreaks store](https://shop.elecfreaks.com/products/nezha-breakout-board-v2)
+The NeZha V2 Expansion Pack is tailored for the micro:bit, aimed at stimulating students' innovative thinking and practical skills. This guide facilitates programming and control of the NeZha V2 Expansion Board, enabling functions such as motor control and sensor integration. To purchase the NeZha V2, visit the [Elecfreaks Official Store](https://shop.elecfreaks.com/products/nezha-breakout-board-v2).
 
-## Code Example
-```JavaScript
+## Key Features
 
-input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    NEZHA_V2.servoPostionReset(MotorPostion.M1)
-})
+- **Independent Motor Control:** Directly manipulate motor direction using onboard buttons, even without connecting to the micro:bit.
+- **LEGO & Fischertechnik Compatibility:** Interfaces on the casing align with LEGO and Fischertechnik bricks, fostering personalized electronic project constructions.
+- **Color Recognition System:** An intuitive labelling system using colors simplifies sensor and port connections.
+
+## Getting Started
+
+### Installing the Extension
+
+1. Launch MakeCode editor and click the "Extensions" icon.
+2. Search for "NeZha V2" or paste the link "https://github.com/elecfreaks/pxt-nezha2" to download and install the extension.
+
+### Basic Examples
+
+#### Motor Rotation Control
+
+**Block Editor Example**
+
+1. Drag the "on button A pressed" block into the script area.
+2. Below it, insert the "NeZha V2 - Start Motor" block, set to Motor M1 rotating clockwise.
+3. Repeat for Button B, controlling other motors as desired.
+
+**JavaScript Example**
+
+```javascript
 input.onButtonPressed(Button.A, function () {
-    NEZHA_V2.nezha2MotorStart(MotorPostion.M1, MovementDirection.cw)
-    NEZHA_V2.nezha2MotorStart(MotorPostion.M2, MovementDirection.cw)
-    NEZHA_V2.nezha2MotorStart(MotorPostion.M3, MovementDirection.cw)
-    NEZHA_V2.nezha2MotorStart(MotorPostion.M4, MovementDirection.cw)
-})
-input.onButtonPressed(Button.B, function () {
-    NEZHA_V2.goToAbsolutePosition(MotorPostion.M1, ServoMotionMode.cw, 0)
-    NEZHA_V2.goToAbsolutePosition(MotorPostion.M2, ServoMotionMode.cw, 0)
-})
-
-
+    NEZHA_V2.nezha2MotorStart(MotorPosition.M1, MovementDirection.CW);
+});
+// Example code omitted; add logic here for Button B controlling different motors
 ```
-## Supported targets
 
-* for PXT/microbit
+#### Moving Motor to a Specified Position
+
+**Block Editor Example**
+
+1. Utilize the "on button B pressed" block.
+2. Append the "NeZha V2 - Go To Absolute Position" block, specifying Motor M1 to rotate clockwise to position 0.
+
+**JavaScript Example**
+
+```javascript
+input.onButtonPressed(Button.B, function () {
+    NEZHA_V2.goToAbsolutePosition(MotorPosition.M1, ServoMotionMode.CW, 0);
+});
+```
+
+## Advanced Applications
+
+Delve into advanced functionalities like motor speed regulation and sensor data retrieval. For detailed examples and instructions, visit our [online tutorials](https://wiki.elecfreaks.com/en/microbit/expansion-board/nezha-v2/).
+
+## Supported Targets
+
+- PXT/micro:bit
 
 ## License
-MIT
 
+This extension is licensed under the MIT License.
