@@ -1,21 +1,20 @@
 {
     "name": "pxt-nezha2",
-    "version": "1.0.0",
-    "description": "The micro:bit extension board Nezha2(哪吒2) with RJ11 connection port by ELECFREAKS Co.ltd",
+    "version": "1.0.1",
+    "description": "The micro:bit extension board Nezha2 with RJ11 connection port by ELECFREAKS Co.ltd",
     "dependencies": {
-        "core": "*",
-        "microphone": "*"
+        "core": "*"
     },
     "files": [
         "README.md",
         "main.ts",
         "_locales/zh/pxt-nezha2-strings.json",
-        "_locales/pxt-nezha2-strings.json"
+        "_locales/en/pxt-nezha2-strings.json"
     ],
     "testFiles": [
         "test.ts"
     ],
-    "public": false,
+    "public": true, 
     "targetVersions": {
         "target": "6.0.28",
         "targetId": "microbit"
@@ -23,5 +22,6 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "tsprj",
+    "license": "MIT"
 }
