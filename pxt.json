@@ -1,6 +1,7 @@
 {
     "name": "pxt-nezha2",
-    "version": "1.0.1",
+    "version": "1.0.2",
+    "license": "MIT",
     "description": "The micro:bit extension board Nezha2 with RJ11 connection port by ELECFREAKS Co.ltd",
     "dependencies": {
         "core": "*"
@@ -9,12 +10,12 @@
         "README.md",
         "main.ts",
         "_locales/zh/pxt-nezha2-strings.json",
-        "_locales/en/pxt-nezha2-strings.json"
+        "_locales/pxt-nezha2-strings.json"
     ],
     "testFiles": [
         "test.ts"
     ],
-    "public": true, 
+    "public": true,
     "targetVersions": {
         "target": "6.0.28",
         "targetId": "microbit"
@@ -22,6 +23,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprj",
-    "license": "MIT"
+    "preferredEditor": "tsprj"
 }
