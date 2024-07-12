@@ -1,4 +1,4 @@
-enum MotorPostion {
+enum motorPostion {
     //%block="A"
     M1 = 1,
     //%block="B"
@@ -9,33 +9,32 @@ enum MotorPostion {
     M4 = 4
 }
 
-
-enum MovementDirection {
+enum movementDirection {
     //%block="clockwise"
-    cw = 1,
+    CW = 1,
     //%block="counterclockwise"
-    ccw = 2
+    CCW = 2
 }
 
-enum SportsMode {
+enum sportsMode {
     //%block="degrees"
-    degree = 2,
+    DEGREE = 2,
     //%block="turns"
-    circle = 1,
+    CIRCLE = 1,
     //%block="seconds"
-    second = 3
+    SECOND = 3
 }
 
-enum ServoMotionMode {
+enum servoMotionMode {
     //%block="clockwise"
-    cw = 2,
+    CW = 2,
     //%block="shortest path"
-    ShortestPath = 1,
+    SHORTESTPATH = 1,
     //%block="counterclockwise"
-    ccw = 3
+    CCW = 3
 }
 
-enum MotorPostionLeft {
+enum motorPostionLeft {
     //%block="A"
     A = 1,
     //%block="B"
@@ -43,9 +42,9 @@ enum MotorPostionLeft {
     //%block="C"
     C = 3,
     //%block="D"
-    Degree = 4
+    DEGREE = 4
 }
-enum MotorPostionRight {
+enum motorPostionRight {
     //%block="A"
     A = 1,
     //%block="B"
@@ -53,31 +52,20 @@ enum MotorPostionRight {
     //%block="C"
     C = 3,
     //%block="D"
-    Degree = 4
+    DEGREE = 4
 }
-enum HorizontalDirection {
-    //%block="left"
-    left = 1,
-    //%block="right"
-    right = 2
-}
+
 
 enum VerticallDirection {
     //%block="forward"
-    up = 1,
+    UP = 1,
     //%block="backward"
-    dowm = 2
+    DOWM = 2
 }
 
-enum Unit {
-    //%block="cm"
-    cm = 1,
-    //%block="irch"
-    irch = 2
-}
 
-//% color=#ff0011  icon="\uf06d" block="NEZHA_V2" blockId="NEZHA_V2"
-namespace NEZHA_V2 {
+//% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
+namespace nezhaV2 {
     let i2cAddr: number = 0x10;
     let setMotorCombination = 0;
     let getMotorCombinationSpeed = 0;
@@ -94,11 +82,11 @@ namespace NEZHA_V2 {
     buf[7] = 0x00;
     pins.i2cWriteBuffer(i2cAddr, buf);
 
-    //% group="Basic functions"
-    //% block="Set %MotorPostion to run %MovementDirection %speed  %SportsMode"
+    //% groUP="Basic functions"
+    //% block="Set %motorPostion to run %movementDirection %speed  %sportsMode"
     //% inlineInputMode=inline
     //% weight=407 
-    export function Motorspeed(motor: MotorPostion, direction: MovementDirection, speed: number, MotorFunction: SportsMode): void {
+    export function motorSpeed(motor: motorPostion, direction: movementDirection, speed: number, MotorFunction: sportsMode): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -111,11 +99,11 @@ namespace NEZHA_V2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=406
-    //% block="Set %MotorPostion to rotate %ServoMotionMode at angle %target_angle"
+    //% block="Set %motorPostion to rotate %servoMotionMode at angle %target_angle"
     //% target_angle.min=0  target_angle.max=360
-    export function goToAbsolutePosition(motor: MotorPostion, modePostion: ServoMotionMode, target_angle: number): void {
+    export function goToAbsolutePosition(motor: motorPostion, modePostion: servoMotionMode, target_angle: number): void {
         while (target_angle < 0) {
             target_angle += 360
         }
@@ -133,11 +121,11 @@ namespace NEZHA_V2 {
         basic.pause(5);
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=405
-    //% block="Setting %MotorPostion to start the motor in %MovementDirection"
+    //% block="Setting %motorPostion to start the motor in %movementDirection"
     //% speed.min=0  speed.max=100
-    export function nezha2MotorStart(motor: MotorPostion, direction: MovementDirection): void {
+    export function nezha2MotorStart(motor: motorPostion, direction: movementDirection): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -151,11 +139,11 @@ namespace NEZHA_V2 {
 
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=404
-    //% block="Set %MotorPostion shutting down the motor"
+    //% block="Set %motorPostion shutting down the motor"
     //% speed.min=0  speed.max=100
-    export function nezha2MotorStop(motor: MotorPostion,): void {
+    export function nezha2MotorStop(motor: motorPostion,): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -168,20 +156,20 @@ namespace NEZHA_V2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=403
-    //% block="Set %MotorPostion speed to %speed\\%"
+    //% block="Set %motorPostion speed to %speed\\%"
     //% speed.min=-100  speed.max=100
-    export function nezha2MotorSpeedCtrolExport(motor: MotorPostion, speed: number): void {
+    export function nezha2MotorSpeedCtrolExport(motor: motorPostion, speed: number): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
         buf[2] = motor;
         if (speed > 0) {
-            buf[3] = MovementDirection.cw;
+            buf[3] = movementDirection.CW;
         }
         else {
-            buf[3] = MovementDirection.ccw;
+            buf[3] = movementDirection.CCW;
         }
         buf[4] = 0x60;
         buf[5] = Math.abs(speed);
@@ -190,7 +178,7 @@ namespace NEZHA_V2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    function nezha2MotorSpeedCtrol(motor: MotorPostion, direction: MovementDirection, speed: number): void {
+    function nezha2MotorSpeedCtrol(motor: motorPostion, direction: movementDirection, speed: number): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -203,18 +191,18 @@ namespace NEZHA_V2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=402
-    //%block="%MotorPostion Angular value"
-    export function readServoAbsolutePostion(motor: MotorPostion): number {
+    //%block="%motorPostion Angular value"
+    export function readServoAbsolutePostion(motor: motorPostion): number {
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
         buf[2] = motor;
         buf[3] = 0x00;
-        buf[4] = 0x46; 
+        buf[4] = 0x46;
         buf[5] = 0x00;
-        buf[6] = 0xF5; 
+        buf[6] = 0xF5;
         buf[7] = 0x00;
         pins.i2cWriteBuffer(i2cAddr, buf);
         basic.pause(4);
@@ -226,10 +214,10 @@ namespace NEZHA_V2 {
         return (position % 3600) * 0.1;
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=400
-    //%block="%MotorPostion Speed (laps/sec)"
-    export function readServoAbsoluteSpeed(motor: MotorPostion): number {
+    //%block="%motorPostion Speed (laps/sec)"
+    export function readServoAbsoluteSpeed(motor: motorPostion): number {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -246,10 +234,10 @@ namespace NEZHA_V2 {
         return Math.floor(Servo1Speed * 0.0926);
     }
 
-    //% group="Basic functions"
+    //% groUP="Basic functions"
     //% weight=399
-    //%block="Set motor %MotorPostion to zero"
-    export function servoPostionReset(motor: MotorPostion): void {
+    //%block="Set motor %motorPostion to zero"
+    export function servoPostionReset(motor: motorPostion): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -264,70 +252,70 @@ namespace NEZHA_V2 {
     }
     let motorLeftGlobal = 0
     let motorRightGlobal = 0
-    //% group="Application functions"
+    //% groUP="Application functions"
     //% weight=410
-    //%block="Set the running motor to left wheel %MotorPostionLeft right wheel %MotorPostionRight"
-    export function RunningMotorToeSpeed(motorLeft: MotorPostionLeft, motorRight: MotorPostionRight): void {
+    //%block="Set the running motor to left wheel %motorPostionLeft right wheel %motorPostionRight"
+    export function runningMotorToeSpeed(motorLeft: motorPostionLeft, motorRight: motorPostionRight): void {
         motorLeftGlobal = motorLeft
         motorRightGlobal = motorRight
     }
 
-    //% group="Application functions"
+    //% groUP="Application functions"
     //% weight=409
     //%block="Set the speed to %speed \\%"
     //% speed.min=0  speed.max=100
-    export function SetMotionSpeed(speed: number): void {
+    export function setMotionSpeed(speed: number): void {
         motorspeedGlobal = speed
     }
 
-    //% group="Application functions"
+    //% groUP="Application functions"
     //% weight=406
     //%block="Stop movement"
-    export function StopCombinationMotor(): void {
+    export function stopCombinationMotor(): void {
         nezha2MotorStop(motorLeftGlobal)
         nezha2MotorStop(motorRightGlobal)
     }
 
-    //% group="Application functions"
+    //% groUP="Application functions"
     //% weight=405
     //%block="Combination Motor Move to %VerticallDirection"
     //%block="Move %VerticallDirection"
 
-    export function CombinationMotorVerticallDirectionMove(verticallDirection: VerticallDirection): void {
+    export function combinationMotorVerticallDirectionMove(verticallDirection: VerticallDirection): void {
         switch (verticallDirection) {
-            case VerticallDirection.up:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.ccw, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.cw, motorspeedGlobal)
+            case VerticallDirection.UP:
+                nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CCW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CW, motorspeedGlobal)
                 break
-            case VerticallDirection.dowm:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.cw, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.ccw, motorspeedGlobal)
+            case VerticallDirection.DOWM:
+                nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CCW, motorspeedGlobal)
                 break
         }
 
     }
 
-    //% group="Application functions"
+    //% groUP="Application functions"
     //% weight=402
     //%block="Set the left wheel speed at %speedleft \\%, right wheel speed at %speedright \\%"
     //% speedleft.min=-100  speedleft.max=100 speedright.min=-100  speedright.max=100
     export function setSpeedfLeftRightWheel(speedleft: number, speedright: number): void {
         if (speedleft > 0) {
-            nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.ccw, speedleft)
+            nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CCW, speedleft)
         }
         else {
-            nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.cw, Math.abs(speedleft))
+            nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CW, Math.abs(speedleft))
         }
         if (speedright > 0) {
-            nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.cw, speedright)
+            nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CW, speedright)
         }
         else {
-            nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.ccw, Math.abs(speedright))
+            nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CCW, Math.abs(speedright))
         }
 
     }
 
-    //% group="export functions"
+    //% groUP="export functions"
     //% weight=320
     //%block="Version Number"
     export function readVersion(): string {
