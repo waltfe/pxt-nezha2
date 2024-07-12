@@ -1,4 +1,4 @@
-enum motorPostion {
+enum MotorPostion {
     //%block="A"
     M1 = 1,
     //%block="B"
@@ -9,14 +9,14 @@ enum motorPostion {
     M4 = 4
 }
 
-enum movementDirection {
+enum MovementDirection {
     //%block="clockwise"
     CW = 1,
     //%block="counterclockwise"
     CCW = 2
 }
 
-enum sportsMode {
+enum SportsMode {
     //%block="degrees"
     DEGREE = 2,
     //%block="turns"
@@ -25,7 +25,7 @@ enum sportsMode {
     SECOND = 3
 }
 
-enum servoMotionMode {
+enum ServoMotionMode {
     //%block="clockwise"
     CW = 2,
     //%block="shortest path"
@@ -34,7 +34,7 @@ enum servoMotionMode {
     CCW = 3
 }
 
-enum motorPostionLeft {
+enum MotorPostionLeft {
     //%block="A"
     A = 1,
     //%block="B"
@@ -44,7 +44,7 @@ enum motorPostionLeft {
     //%block="D"
     DEGREE = 4
 }
-enum motorPostionRight {
+enum MotorPostionRight {
     //%block="A"
     A = 1,
     //%block="B"
@@ -83,10 +83,10 @@ namespace nezhaV2 {
     pins.i2cWriteBuffer(i2cAddr, buf);
 
     //% groUP="Basic functions"
-    //% block="Set %motorPostion to run %movementDirection %speed  %sportsMode"
+    //% block="Set %MotorPostion to run %MovementDirection %speed  %SportsMode"
     //% inlineInputMode=inline
     //% weight=407 
-    export function motorSpeed(motor: motorPostion, direction: movementDirection, speed: number, MotorFunction: sportsMode): void {
+    export function motorSpeed(motor: MotorPostion, direction: MovementDirection, speed: number, MotorFunction: SportsMode): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -101,9 +101,9 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=406
-    //% block="Set %motorPostion to rotate %servoMotionMode at angle %target_angle"
+    //% block="Set %MotorPostion to rotate %ServoMotionMode at angle %target_angle"
     //% target_angle.min=0  target_angle.max=360
-    export function goToAbsolutePosition(motor: motorPostion, modePostion: servoMotionMode, target_angle: number): void {
+    export function goToAbsolutePosition(motor: MotorPostion, modePostion: ServoMotionMode, target_angle: number): void {
         while (target_angle < 0) {
             target_angle += 360
         }
@@ -123,9 +123,9 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=405
-    //% block="Setting %motorPostion to start the motor in %movementDirection"
+    //% block="Setting %MotorPostion to start the motor in %MovementDirection"
     //% speed.min=0  speed.max=100
-    export function nezha2MotorStart(motor: motorPostion, direction: movementDirection): void {
+    export function nezha2MotorStart(motor: MotorPostion, direction: MovementDirection): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -141,9 +141,9 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=404
-    //% block="Set %motorPostion shutting down the motor"
+    //% block="Set %MotorPostion shutting down the motor"
     //% speed.min=0  speed.max=100
-    export function nezha2MotorStop(motor: motorPostion,): void {
+    export function nezha2MotorStop(motor: MotorPostion,): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -158,18 +158,18 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=403
-    //% block="Set %motorPostion speed to %speed\\%"
+    //% block="Set %MotorPostion speed to %speed\\%"
     //% speed.min=-100  speed.max=100
-    export function nezha2MotorSpeedCtrolExport(motor: motorPostion, speed: number): void {
+    export function nezha2MotorSpeedCtrolExport(motor: MotorPostion, speed: number): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
         buf[2] = motor;
         if (speed > 0) {
-            buf[3] = movementDirection.CW;
+            buf[3] = MovementDirection.CW;
         }
         else {
-            buf[3] = movementDirection.CCW;
+            buf[3] = MovementDirection.CCW;
         }
         buf[4] = 0x60;
         buf[5] = Math.abs(speed);
@@ -178,7 +178,7 @@ namespace nezhaV2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    function nezha2MotorSpeedCtrol(motor: motorPostion, direction: movementDirection, speed: number): void {
+    function nezha2MotorSpeedCtrol(motor: MotorPostion, direction: MovementDirection, speed: number): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -193,8 +193,8 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=402
-    //%block="%motorPostion Angular value"
-    export function readServoAbsolutePostion(motor: motorPostion): number {
+    //%block="%MotorPostion Angular value"
+    export function readServoAbsolutePostion(motor: MotorPostion): number {
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -216,8 +216,8 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=400
-    //%block="%motorPostion Speed (laps/sec)"
-    export function readServoAbsoluteSpeed(motor: motorPostion): number {
+    //%block="%MotorPostion Speed (laps/sec)"
+    export function readServoAbsoluteSpeed(motor: MotorPostion): number {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -236,8 +236,8 @@ namespace nezhaV2 {
 
     //% groUP="Basic functions"
     //% weight=399
-    //%block="Set motor %motorPostion to zero"
-    export function servoPostionReset(motor: motorPostion): void {
+    //%block="Set motor %MotorPostion to zero"
+    export function servoPostionReset(motor: MotorPostion): void {
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -254,8 +254,8 @@ namespace nezhaV2 {
     let motorRightGlobal = 0
     //% groUP="Application functions"
     //% weight=410
-    //%block="Set the running motor to left wheel %motorPostionLeft right wheel %motorPostionRight"
-    export function runningMotorToeSpeed(motorLeft: motorPostionLeft, motorRight: motorPostionRight): void {
+    //%block="Set the running motor to left wheel %MotorPostionLeft right wheel %MotorPostionRight"
+    export function runningMotorToeSpeed(motorLeft: MotorPostionLeft, motorRight: MotorPostionRight): void {
         motorLeftGlobal = motorLeft
         motorRightGlobal = motorRight
     }
@@ -284,12 +284,12 @@ namespace nezhaV2 {
     export function combinationMotorVerticallDirectionMove(verticallDirection: VerticallDirection): void {
         switch (verticallDirection) {
             case VerticallDirection.UP:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CCW, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.CCW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.CW, motorspeedGlobal)
                 break
             case VerticallDirection.DOWM:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CW, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CCW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.CW, motorspeedGlobal)
+                nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.CCW, motorspeedGlobal)
                 break
         }
 
@@ -301,16 +301,16 @@ namespace nezhaV2 {
     //% speedleft.min=-100  speedleft.max=100 speedright.min=-100  speedright.max=100
     export function setSpeedfLeftRightWheel(speedleft: number, speedright: number): void {
         if (speedleft > 0) {
-            nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CCW, speedleft)
+            nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.CCW, speedleft)
         }
         else {
-            nezha2MotorSpeedCtrol(motorLeftGlobal, movementDirection.CW, Math.abs(speedleft))
+            nezha2MotorSpeedCtrol(motorLeftGlobal, MovementDirection.CW, Math.abs(speedleft))
         }
         if (speedright > 0) {
-            nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CW, speedright)
+            nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.CW, speedright)
         }
         else {
-            nezha2MotorSpeedCtrol(motorRightGlobal, movementDirection.CCW, Math.abs(speedright))
+            nezha2MotorSpeedCtrol(motorRightGlobal, MovementDirection.CCW, Math.abs(speedright))
         }
 
     }
