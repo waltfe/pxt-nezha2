@@ -1,8 +1,4 @@
 {
-    "MotorPostion.M1|block": "A",
-    "MotorPostion.M2|block": "B",
-    "MotorPostion.M3|block": "C",
-    "MotorPostion.M4|block": "D",
     "NezhaV2MovementDirection.CW|block": "clockwise",
     "NezhaV2MovementDirection.CCW|block": "counterclockwise",
     "NezhaV2SportsMode.Circle|block": "turns",
