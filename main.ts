@@ -1,11 +1,11 @@
 enum MotorPostion {
-    //%block="A"
+    //%block="M1"
     M1 = 1,
-    //%block="B"
+    //%block="M2"
     M2 = 2,
-    //%block="C"
+    //%block="M3"
     M3 = 3,
-    //%block="D"
+    //%block="M4"
     M4 = 4
 }
 
@@ -35,24 +35,24 @@ enum NezhaV2ServoMotionMode {
 }
 
 enum MotorPostionLeft {
-    //%block="A"
-    A = 1,
-    //%block="B"
-    B = 2,
-    //%block="C"
-    C = 3,
-    //%block="D"
-    Degree = 4
+    //%block="M1"
+    M1 = 1,
+    //%block="M2"
+    M2 = 2,
+    //%block="M3"
+    M3 = 3,
+    //%block="M4"
+    M4 = 4
 }
 enum MotorPostionRight {
-    //%block="A"
-    A = 1,
-    //%block="B"
-    B = 2,
-    //%block="C"
-    C = 3,
-    //%block="D"
-    Degree = 4
+    //%block="M1"
+    M1 = 1,
+    //%block="M2"
+    M2 = 2,
+    //%block="M3"
+    M3 = 3,
+    //%block="M4"
+    M4 = 4
 }
 
 
