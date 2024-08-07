@@ -2,7 +2,7 @@
     "NezhaV2MotorPostion.M1|block": "M1",
     "NezhaV2MotorPostion.M2|block": "M2",
     "NezhaV2MotorPostion.M3|block": "M3",
-    "NezhaV2MotorPostion.M4|block": "M3",
+    "NezhaV2MotorPostion.M4|block": "M4",
     "NezhaV2MovementDirection.CW|block": "clockwise",
     "NezhaV2MovementDirection.CCW|block": "counterclockwise",
     "NezhaV2SportsMode.Circle|block": "turns",
