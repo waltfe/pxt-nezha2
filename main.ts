@@ -116,28 +116,6 @@ namespace NEZHA_V2 {
     }
 
     //% group="Basic functions"
-    //% weight=405
-    //% block="Set %MotorPostion servo speed %servoSpeed"
-    //% servoSpeed.min=0  servoSpeed.max=150
-    export function setServoSpeed(motor: MotorPostion, servoSpeed: number): void {
-        servoSpeed *= 6
-        let buf = pins.createBuffer(8)
-        buf[0] = 0xFF;
-        buf[1] = 0xF9;
-        buf[2] = motor;
-        buf[3] = 0x00;
-        buf[4] = 0x77;
-        buf[5] = (servoSpeed >> 8) & 0XFF;//L
-        buf[6] = 0x00;
-        buf[7] = (servoSpeed >> 0) & 0XFF;//H
-        pins.i2cWriteBuffer(i2cAddr, buf);
-        basic.pause(5);
-
-
-    }
-
-
-    //% group="Basic functions"
     //% weight=406
     //% block="Set %MotorPostion to rotate %ServoMotionMode at angle %target_angle"
     //% target_angle.min=0  target_angle.max=360
@@ -165,7 +143,7 @@ namespace NEZHA_V2 {
     //% group="Basic functions"
     //% weight=405
     //% block="Setting %MotorPostion to start the motor in %MovementDirection"
-
+    
     //% speed.min=0  speed.max=100
     export function nezha2MotorStart(motor: MotorPostion, direction: MovementDirection): void {
         let buf = pins.createBuffer(8)
@@ -298,6 +276,23 @@ namespace NEZHA_V2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
 
     }
+    //% group="Basic functions"
+    //% weight=398
+    //%block="Set the %MotorPostion servo speed to  %speed \\%"
+    //% speed.min=-100  speed.max=100
+    export function setServoSpeed(motor: MotorPostion, speed: number): void {
+        let buf = pins.createBuffer(8)
+        buf[0] = 0xFF;
+        buf[1] = 0xF9;
+        buf[2] = motor;
+        buf[3] = 0x00;
+        buf[4] = 0x77;
+        buf[5] = 0x00;
+        buf[6] = 0xF5;
+        buf[7] = 0x00;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+
+    }
 
     // 左边轮子
     let motorLeftGlobal = 0
@@ -424,7 +419,7 @@ namespace NEZHA_V2 {
     //%block="Combination Motor Move to %VerticallDirection"
     //%block="Move %VerticallDirection"
 
-
+    
     export function CombinationMotorVerticallDirectionMove(verticallDirection: VerticallDirection): void {
         switch (verticallDirection) {
             case VerticallDirection.up:
@@ -460,18 +455,19 @@ namespace NEZHA_V2 {
     //     }
 
     // }
-    // let distanceroundCm
-    // let distanceroundIrch
-    // /*
-    // 组合积木块8：将电机旋转一圈设置为（N）（厘米）
-    // */
-    // //% group="Application functions"
-    // //% weight=403
-    // //%block="Set the motor to rotate one revolution to %far %Unit"
-    // export function SetMotorOneRotateRevolution(far: number, unit: Unit): void {
-    //     let ServoAbsolutePostion: number
-
-    // }
+    let degreeToDistance = 0
+    /*
+    组合积木块8：将电机旋转一圈设置为（N）（毫米）
+    */
+    //% group="Application functions"
+    //% weight=403
+    //%block="Rotate the motor once and set it to %far %Unit"
+    export function SetMotorOneRotateRevolution(far: number, unit: Unit): void {
+        if (unit == Unit.irch) {
+            degreeToDistance = far * 0.3937
+        }
+        degreeToDistance = far
+    }
 
     /*
     组合积木块9：组合舵机垂直方向运动（一直运动）
