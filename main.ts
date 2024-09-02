@@ -26,6 +26,18 @@ enum SportsMode {
     second = 3
 }
 
+enum DistanceAndAngleUnit {
+    //%block="turns"
+    circle = 1,
+    //%block="degrees"
+    degree = 2,
+    //%block="seconds"
+    second = 3,
+    //%block="cm"
+    cm = 4,
+    //%block="irch"
+    irch = 5,
+}
 
 enum ServoMotionMode {
     //%block="clockwise"
@@ -143,7 +155,7 @@ namespace NEZHA_V2 {
     //% group="Basic functions"
     //% weight=405
     //% block="Setting %MotorPostion to start the motor in %MovementDirection"
-    
+
     //% speed.min=0  speed.max=100
     export function nezha2MotorStart(motor: MotorPostion, direction: MovementDirection): void {
         let buf = pins.createBuffer(8)
@@ -419,7 +431,7 @@ namespace NEZHA_V2 {
     //%block="Combination Motor Move to %VerticallDirection"
     //%block="Move %VerticallDirection"
 
-    
+
     export function CombinationMotorVerticallDirectionMove(verticallDirection: VerticallDirection): void {
         switch (verticallDirection) {
             case VerticallDirection.up:
@@ -433,40 +445,85 @@ namespace NEZHA_V2 {
         }
 
     }
-    // /*
-    // 组合积木块7：组合舵机垂直方向运动（一直运动）
-    // */
-    // //% group="Application functions"
-    // //% weight=404
-    // //%block="Combination Motor Move to %VerticallDirection %speed %SportsMode "
-    // //% speed.min=0  speed.max=360
-    // export function CombinationServoVerticallDirectionMove(verticallDirection: VerticallDirection, speed: number, MotorFunction: SportsMode): void {
-    //     let ServoAbsolutePostion: number
-    //     //组合电机使用指令圈度秒
-    //     switch (verticallDirection) {
-    //         case VerticallDirection.up:
-    //             Motorspeed(motorLeftGlobal, MovementDirection.cw, speed, MotorFunction)
-    //             Motorspeed(motorRightGlobal, MovementDirection.ccw, speed, MotorFunction)
-    //             break
-    //         case VerticallDirection.dowm:
-    //             Motorspeed(motorLeftGlobal, MovementDirection.ccw, speed, MotorFunction)
-    //             Motorspeed(motorRightGlobal, MovementDirection.cw, speed, MotorFunction)
-    //             break
-    //     }
-
-    // }
     let degreeToDistance = 0
     /*
-    组合积木块8：将电机旋转一圈设置为（N）（毫米）
+    组合积木块7：将电机旋转一圈设置为（N）（毫米）
     */
     //% group="Application functions"
-    //% weight=403
+    //% weight=404
     //%block="Rotate the motor once and set it to %far %Unit"
     export function SetMotorOneRotateRevolution(far: number, unit: Unit): void {
         if (unit == Unit.irch) {
             degreeToDistance = far * 0.3937
         }
         degreeToDistance = far
+    }
+
+    /*
+    组合积木块8：组合舵机垂直方向运动（一直运动）
+    */
+    //% group="Application functions"
+    //% weight=403
+    //%block="Combination Motor Move to %VerticallDirection %speed %SportsMode "
+    export function CombinationServoVerticallDirectionMove(verticallDirection: VerticallDirection, speed: number, MotorFunction: DistanceAndAngleUnit): void {
+            switch (MotorFunction) {
+                case DistanceAndAngleUnit.circle:
+                    if (verticallDirection == VerticallDirection.up) {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.ccw, speed, SportsMode.circle)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.cw, speed, SportsMode.circle)
+                    } else {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.cw, speed, SportsMode.circle)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.ccw, speed, SportsMode.circle)
+                    }
+                    break;
+                case DistanceAndAngleUnit.degree:
+                    if (verticallDirection == VerticallDirection.up) {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.ccw, speed, SportsMode.degree)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.cw, speed, SportsMode.degree)
+                    } else {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.cw, speed, SportsMode.degree)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.ccw, speed, SportsMode.degree)
+                    }
+                    break;
+                case DistanceAndAngleUnit.second:
+                    if (verticallDirection == VerticallDirection.up) 
+                    {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.ccw, speed, SportsMode.second)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.cw, speed, SportsMode.second)
+                    } else {
+                        NEZHA_V2.Motorspeed(motorLeftGlobal, MovementDirection.cw, speed, SportsMode.second)
+                        NEZHA_V2.Motorspeed(motorRightGlobal, MovementDirection.ccw, speed, SportsMode.second)
+                    }
+                    break;
+                case DistanceAndAngleUnit.cm :
+                    let distanceCm = 360 * speed / degreeToDistance 
+                    if (verticallDirection == VerticallDirection.up) 
+                    {
+                        Motorspeed(motorLeftGlobal, MovementDirection.ccw, distanceCm, SportsMode.degree)
+                        Motorspeed(motorRightGlobal, MovementDirection.cw, distanceCm, SportsMode.degree)
+                    }
+                    else
+                    {
+                        Motorspeed(motorLeftGlobal, MovementDirection.cw, distanceCm, SportsMode.degree)
+                        Motorspeed(motorRightGlobal, MovementDirection.ccw, distanceCm, SportsMode.degree)
+                    }
+                    break;
+                case DistanceAndAngleUnit.irch :
+                    let distanceIrch = 360 * speed / degreeToDistance
+                    if (verticallDirection == VerticallDirection.up) 
+                    {
+                        Motorspeed(motorLeftGlobal, MovementDirection.ccw, distanceIrch, SportsMode.degree)
+                        Motorspeed(motorRightGlobal, MovementDirection.cw, distanceIrch, SportsMode.degree)
+                    }
+                    else
+                    {
+                        Motorspeed(motorLeftGlobal, MovementDirection.cw, distanceIrch, SportsMode.degree)
+                        Motorspeed(motorRightGlobal, MovementDirection.ccw, distanceIrch, SportsMode.degree)
+                    }
+                    break;
+  
+        
+        }
     }
 
     /*
