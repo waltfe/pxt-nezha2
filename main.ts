@@ -328,7 +328,7 @@ namespace nezhaV2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
 
     }
-    let servoSpeedGlobal = 0
+    let servoSpeedGlobal = 150
     //% group="Basic functions"
     //% weight=398
     //%block="Set the %NezhaV2MotorPostion servo speed to  %speed \\%"
@@ -490,7 +490,7 @@ namespace nezhaV2 {
                     motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, distanceIrch, NezhaV2SportsMode.Degree)
                     motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, distanceIrch, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(distanceIrch*1000/(servoSpeedGlobal*6))
+                basic.pause(distanceIrch*1000/(servoSpeedGlobal*6)+100)
                 
                 break;
 
