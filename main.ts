@@ -443,7 +443,7 @@ namespace nezhaV2 {
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Circle)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Circle)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
+                basic.pause(speed*1000/(servoSpeedGlobal*6) + 500)
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.Degree:
                 if (verticallDirection == NezhaV2VerticallDirection.Up) {
@@ -453,7 +453,7 @@ namespace nezhaV2 {
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Degree)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
+                basic.pause(speed*1000/(servoSpeedGlobal*6) + 500)
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.Second:
@@ -464,7 +464,7 @@ namespace nezhaV2 {
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Second)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Second)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
+                basic.pause(speed*1000/(servoSpeedGlobal*6) + 500)
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.cm:
@@ -477,7 +477,7 @@ namespace nezhaV2 {
                     motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, distanceCm, NezhaV2SportsMode.Degree)
                     motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, distanceCm, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(distanceCm*1000/(servoSpeedGlobal*6))
+                basic.pause(distanceCm*1000/(servoSpeedGlobal*6) + 500)
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.inch:
@@ -490,7 +490,7 @@ namespace nezhaV2 {
                     motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, distanceIrch, NezhaV2SportsMode.Degree)
                     motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, distanceIrch, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(distanceIrch*1000/(servoSpeedGlobal*6)+100)
+                basic.pause(distanceIrch*1000/(servoSpeedGlobal*6)+500)
                 
                 break;
 
