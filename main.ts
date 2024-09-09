@@ -141,7 +141,7 @@ namespace nezhaV2 {
     //% weight=406
     //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle"
     //% targetAngle.min=0  targetAngle.max=360
-    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2MovementDirection, targetAngle: number): void {
+    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number): void {
         while (targetAngle < 0) {
             targetAngle += 360
         }
