@@ -90,8 +90,8 @@ namespace nezhaV2 {
     let i2cAddr: number = 0x10;
     let setMotorCombination = 0;
     let getMotorCombinationSpeed = 0;
-    let motorspeedGlobal = 0
-
+    let motorspeedGlobal = 50
+    let servoSpeedGlobal = 150
     let buf = pins.createBuffer(8)
     buf[0] = 0xFF;
     buf[1] = 0xF9;
@@ -102,6 +102,25 @@ namespace nezhaV2 {
     buf[6] = 0xF5;
     buf[7] = 0x00;
     pins.i2cWriteBuffer(i2cAddr, buf);
+
+    let motorWorkdoneTimeArr = [0, 0, 0, 0];
+    function motorDelay(motor: NezhaV2MotorPostion, speed: number, motorFunction: NezhaV2SportsMode) {
+        let now = input.runningTime();
+        let motorWorkdoneTime = motorWorkdoneTimeArr[motor];
+        if (now < motorWorkdoneTime) {
+            basic.pause(motorWorkdoneTime - now);
+            now = input.runningTime();
+        }
+
+        if (motorFunction == NezhaV2SportsMode.Circle) {
+            motorWorkdoneTimeArr[motor] = now + ((speed * 360000) / (servoSpeedGlobal*6)) + 500;
+        } else if (motorFunction == NezhaV2SportsMode.Second) {
+            motorWorkdoneTimeArr[motor] = now + (speed * 1000) + 500;
+        } else if (motorFunction == NezhaV2SportsMode.Degree) {
+            motorWorkdoneTimeArr[motor] = now + (speed * 1000 / (servoSpeedGlobal * 6)) + 500;
+        }
+
+    }
 
     /**
      * Sets the speed and direction of the motor.
@@ -117,7 +136,7 @@ namespace nezhaV2 {
     //% inlineInputMode=inline
     //% weight=407 
     export function motorSpeed(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number, motorFunction: NezhaV2SportsMode): void {
-motorDelay(motor, speed, motorFunction);
+        motorDelay(motor, speed, motorFunction);
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -157,7 +176,7 @@ motorDelay(motor, speed, motorFunction);
         buf[6] = modePostion;
         buf[7] = (targetAngle >> 0) & 0XFF;
         pins.i2cWriteBuffer(i2cAddr, buf);
-        basic.pause(5);
+        basic.pause(400);
     }
 
     /**
@@ -329,12 +348,13 @@ motorDelay(motor, speed, motorFunction);
         pins.i2cWriteBuffer(i2cAddr, buf);
 
     }
-    let servoSpeedGlobal = 150
+
     //% group="Basic functions"
     //% weight=398
-    //%block="Set the %NezhaV2MotorPostion servo speed to  %speed \\%"
+    //%block="Set the servo speed to  %speed \\%"
     //% speed.min=0  speed.max=100
-    export function setServoSpeed(motor: NezhaV2MotorPostion, speed: number): void {
+
+    export function setServoSpeed(speed: number): void {
         speed *= 15
         servoSpeedGlobal = speed
         let buf = pins.createBuffer(8)
@@ -444,7 +464,6 @@ motorDelay(motor, speed, motorFunction);
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Circle)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Circle)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.Degree:
                 if (verticallDirection == NezhaV2VerticallDirection.Up) {
@@ -454,7 +473,6 @@ motorDelay(motor, speed, motorFunction);
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Degree)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.Second:
@@ -465,7 +483,6 @@ motorDelay(motor, speed, motorFunction);
                     nezhaV2.motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, speed, NezhaV2SportsMode.Second)
                     nezhaV2.motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, speed, NezhaV2SportsMode.Second)
                 }
-                basic.pause(speed*1000/(servoSpeedGlobal*6))
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.cm:
@@ -478,7 +495,6 @@ motorDelay(motor, speed, motorFunction);
                     motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, distanceCm, NezhaV2SportsMode.Degree)
                     motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, distanceCm, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(distanceCm*1000/(servoSpeedGlobal*6))
 
                 break;
             case NezhaV2NezhaV2DistanceAndAngleUnit.inch:
@@ -491,8 +507,7 @@ motorDelay(motor, speed, motorFunction);
                     motorSpeed(motorLeftGlobal, NezhaV2MovementDirection.CW, distanceIrch, NezhaV2SportsMode.Degree)
                     motorSpeed(motorRightGlobal, NezhaV2MovementDirection.CCW, distanceIrch, NezhaV2SportsMode.Degree)
                 }
-                basic.pause(distanceIrch*1000/(servoSpeedGlobal*6)+100)
-                
+
                 break;
 
 
