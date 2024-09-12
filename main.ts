@@ -117,7 +117,8 @@ namespace nezhaV2 {
     //% inlineInputMode=inline
     //% weight=407 
     export function motorSpeed(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number, motorFunction: NezhaV2SportsMode): void {
-        let buf = pins.createBuffer(8)
+motorDelay(motor, speed, motorFunction);
+        let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
         buf[2] = motor;
