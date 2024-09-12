@@ -25,7 +25,7 @@
     "nezhaV2.nezha2MotorStart|block": " 设置%NezhaV2MotorPostion 以%NezhaV2MovementDirection 启动电机",
     "nezhaV2.nezha2MotorStop|block": "设置%NezhaV2MotorPostion 关闭电机",
     "nezhaV2.nezha2MotorSpeedCtrolExport|block": "将 %NezhaV2MotorPostion 速度设置为 %speed \\%",
-    "nezhaV2.setServoSpeed|block": "将 %NezhaV2MotorPostion 舵机速度设置为 %speed \\%",
+    "nezhaV2.setServoSpeed|block": "将舵机速度设置为 %speed \\%",
     "nezhaV2.readServoAbsolutePostion|block": "%NezhaV2MotorPostion 角度值",
     "nezhaV2.readServoAbsoluteSpeed|block": "%NezhaV2MotorPostion 速度 (圈/秒)",
     "nezhaV2.servoPostionReset|block": "设置电机%NezhaV2MotorPostion归零",

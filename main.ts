@@ -1,14 +1,4 @@
 
-enum NezhaV2MotorPostion {
-    //%block="M1"
-    M1 = 1,
-    //%block="M2"
-    M2 = 2,
-    //%block="M3"
-    M3 = 3,
-    //%block="M4"
-    M4 = 4
-}
 
 enum NezhaV2MovementDirection {
     //%block="clockwise"
@@ -85,6 +75,17 @@ enum NezhaV2NezhaV2DistanceAndAngleUnit {
     //%block="inch"
     inch = 5
 }
+
+enum NezhaV2MotorPostion {
+    //%block="M1"
+    M1 = 1,
+    //%block="M2"
+    M2 = 2,
+    //%block="M3"
+    M3 = 3,
+    //%block="M4"
+    M4 = 4
+}
 //% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
 namespace nezhaV2 {
     let i2cAddr: number = 0x10;
@@ -93,6 +94,10 @@ namespace nezhaV2 {
     let motorspeedGlobal = 50
     let servoSpeedGlobal = 150
     let buf = pins.createBuffer(8)
+
+
+
+
     buf[0] = 0xFF;
     buf[1] = 0xF9;
     buf[2] = 0x00;
@@ -103,7 +108,7 @@ namespace nezhaV2 {
     buf[7] = 0x00;
     pins.i2cWriteBuffer(i2cAddr, buf);
 
-    let motorWorkdoneTimeArr = [0, 0, 0, 0];
+    let motorWorkdoneTimeArr = [0, 0, 0, 0, 0];
     function motorDelay(motor: NezhaV2MotorPostion, speed: number, motorFunction: NezhaV2SportsMode) {
         let now = input.runningTime();
         let motorWorkdoneTime = motorWorkdoneTimeArr[motor];
@@ -111,13 +116,12 @@ namespace nezhaV2 {
             basic.pause(motorWorkdoneTime - now);
             now = input.runningTime();
         }
-
         if (motorFunction == NezhaV2SportsMode.Circle) {
-            motorWorkdoneTimeArr[motor] = now + ((speed * 360000) / (servoSpeedGlobal*6)) + 500;
+            motorWorkdoneTimeArr[motor] = now + ((speed * 360000) / (servoSpeedGlobal * 6)) + 1000;
         } else if (motorFunction == NezhaV2SportsMode.Second) {
-            motorWorkdoneTimeArr[motor] = now + (speed * 1000) + 500;
+            motorWorkdoneTimeArr[motor] = now + (speed * 1000) + 1000;
         } else if (motorFunction == NezhaV2SportsMode.Degree) {
-            motorWorkdoneTimeArr[motor] = now + (speed * 1000 / (servoSpeedGlobal * 6)) + 500;
+            motorWorkdoneTimeArr[motor] = now + (speed * 1000 / (servoSpeedGlobal * 6)) + 1000;
         }
 
     }
@@ -136,6 +140,8 @@ namespace nezhaV2 {
     //% inlineInputMode=inline
     //% weight=407 
     export function motorSpeed(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number, motorFunction: NezhaV2SportsMode): void {
+
+
         motorDelay(motor, speed, motorFunction);
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
@@ -191,6 +197,7 @@ namespace nezhaV2 {
     //% block="setting %NezhaV2MotorPostion to start the motor in %NezhaV2MovementDirection"
     //% speed.min=0  speed.max=100
     export function nezha2MotorStart(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection): void {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -215,6 +222,7 @@ namespace nezhaV2 {
     //% block="set %NezhaV2MotorPostion shutting down the motor"
     //% speed.min=0  speed.max=100
     export function nezha2MotorStop(motor: NezhaV2MotorPostion): void {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -240,6 +248,7 @@ namespace nezhaV2 {
     //% block="set %NezhaV2MotorPostion speed to %speed\\%"
     //% speed.min=-100  speed.max=100
     export function nezha2MotorSpeedCtrolExport(motor: NezhaV2MotorPostion, speed: number): void {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -281,6 +290,7 @@ namespace nezhaV2 {
     //% weight=402
     //%block="%NezhaV2MotorPostion angular value"
     export function readServoAbsolutePostion(motor: NezhaV2MotorPostion): number {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -310,6 +320,7 @@ namespace nezhaV2 {
     //% weight=400
     //%block="%NezhaV2MotorPostion speed (laps/sec)"
     export function readServoAbsoluteSpeed(motor: NezhaV2MotorPostion): number {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -336,6 +347,7 @@ namespace nezhaV2 {
     //% weight=399
     //%block="set motor %NezhaV2MotorPostion to zero"
     export function servoPostionReset(motor: NezhaV2MotorPostion): void {
+        motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -426,6 +438,8 @@ namespace nezhaV2 {
     //% weight=405
     //%block="move %NezhaV2VerticallDirection"
     export function combinationMotorNezhaV2VerticallDirectionMove(verticallDirection: NezhaV2VerticallDirection): void {
+        motorDelay(motorLeftGlobal, 0, 1)
+        motorDelay(motorRightGlobal, 0, 1)
         switch (verticallDirection) {
             case NezhaV2VerticallDirection.Up:
                 nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CCW, motorspeedGlobal)
@@ -455,6 +469,8 @@ namespace nezhaV2 {
     //% weight=403
     //%block="Combination Motor Move to %VerticallDirection %speed %SportsMode "
     export function CombinationServoVerticallDirectionMove(verticallDirection: NezhaV2VerticallDirection, speed: number, MotorFunction: NezhaV2NezhaV2DistanceAndAngleUnit): void {
+        motorDelay(motorLeftGlobal, 0, 1)
+        motorDelay(motorRightGlobal, 0, 1)
         switch (MotorFunction) {
             case NezhaV2NezhaV2DistanceAndAngleUnit.Circle:
                 if (verticallDirection == NezhaV2VerticallDirection.Up) {
@@ -526,6 +542,8 @@ namespace nezhaV2 {
     //%block="set the left wheel speed at %speedleft \\%, right wheel speed at %speedright \\%"
     //% speedleft.min=-100  speedleft.max=100 speedright.min=-100  speedright.max=100
     export function setSpeedfLeftRightWheel(speedleft: number, speedright: number): void {
+        motorDelay(motorLeftGlobal, 0, 1)
+        motorDelay(motorRightGlobal, 0, 1)
         if (speedleft > 0) {
             nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CCW, speedleft)
         }
