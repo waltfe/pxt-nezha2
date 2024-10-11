@@ -37,7 +37,7 @@
     "nezhaV2.combinationMotorNezhaV2VerticallDirectionMove|block": "开始向 %NezhaV2VerticallDirection 移动",
     "nezhaV2.CombinationServoNezhaV2VerticallDirectionMove|block": "%NezhaV2VerticallDirection 移动 %speed  %NezhaV2SportsMode",
     "nezhaV2.SetMotorOneRotateRevolution|block": "将电机旋转一圈设置为 %far %Unit ",
-    "nezhaV2.CombinationServoVerticallDirectionMove|block": "%VerticallDirection 移动 %speed %SportsMode ",
+    "nezhaV2.CombinationServoVerticallDirectionMove|block": "向%VerticallDirection 移动 %speed %SportsMode ",
     "nezhaV2.setSpeedfLeftRightWheel|block": "设置左轮速度为%speedleft\\%，设置右轮速度为%speedright\\%",
     "nezhaV2.readVersion|block": "版本号",
     "{id:group}Basic functions": "基础控制",
