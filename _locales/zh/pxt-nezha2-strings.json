@@ -15,7 +15,7 @@
     "NezhaV2NezhaV2DistanceAndAngleUnit.Second|block": "秒",
     "NezhaV2NezhaV2DistanceAndAngleUnit.cm|block": "厘米",
     "NezhaV2NezhaV2DistanceAndAngleUnit.inch|block": "英寸",
-    "NezhaV2ServoMotionMode.ShortestPath|block": "最短路径",
+    "NezhaV2ServoMotionMode.ShortPath|block": "最短路径",
     "NezhaV2ServoMotionMode.CW|block": "顺时针",
     "NezhaV2ServoMotionMode.CCW|block": "逆时针",
     "NezhaV2VerticallDirection.Up|block": "前",
