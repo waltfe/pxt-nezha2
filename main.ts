@@ -2,9 +2,9 @@
 
 enum NezhaV2MovementDirection {
     //%block="clockwise"
-    CW = 1,
+    CW = 2,
     //%block="counterclockwise"
-    CCW = 2
+    CCW = 3
 }
 
 enum NezhaV2SportsMode {
@@ -16,14 +16,6 @@ enum NezhaV2SportsMode {
     Second = 3
 }
 
-enum NezhaV2ServoMotionMode {
-    //%block="clockwise"
-    CW = 2,
-    //%block="shortest path"
-    ShortPath = 1,
-    //%block="counterclockwise"
-    CCW = 3
-}
 
 enum NezhaV2MotorPostionLeft {
     //%block="M1"
