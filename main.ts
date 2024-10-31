@@ -2,11 +2,16 @@
 
 enum NezhaV2MovementDirection {
     //%block="clockwise"
+    CW = 1,
+    //%block="counterclockwise"
+    CCW = 2
+}
+enum NezhaV2ServoMotionMode {
+    //%block="clockwise"
     CW = 2,
     //%block="counterclockwise"
     CCW = 3
 }
-
 enum NezhaV2SportsMode {
     //%block="degrees"
     Degree = 2,
@@ -78,6 +83,8 @@ enum NezhaV2MotorPostion {
     //%block="M4"
     M4 = 4
 }
+
+
 //% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
 namespace nezhaV2 {
     let i2cAddr: number = 0x10;
@@ -161,7 +168,7 @@ namespace nezhaV2 {
     //% weight=406
     //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle"
     //% targetAngle.min=0  targetAngle.max=360
-    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2MovementDirection, targetAngle: number): void {
+    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number): void {
 
         while (targetAngle < 0) {
             targetAngle += 360
