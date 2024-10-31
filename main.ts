@@ -84,7 +84,7 @@ namespace nezhaV2 {
     let setMotorCombination = 0;
     let getMotorCombinationSpeed = 0;
     let motorspeedGlobal = 50
-    let servoSpeedGlobal = 150
+    let servoSpeedGlobal = 900
     let buf = pins.createBuffer(8)
 
     buf[0] = 0xFF;
@@ -113,13 +113,11 @@ namespace nezhaV2 {
         }
 
         if (motorFunction == NezhaV2SportsMode.Circle) {
-            motorWorkdoneTimeArr[motor] = now + (speed * 360 / (servoSpeedGlobal * 0.6)) * 1000;
-
+            motorWorkdoneTimeArr[motor] = now + speed * 360000.0 / servoSpeedGlobal + 500;
         } else if (motorFunction == NezhaV2SportsMode.Second) {
             motorWorkdoneTimeArr[motor] = now + (speed * 1000);
         } else if (motorFunction == NezhaV2SportsMode.Degree) {
-            motorWorkdoneTimeArr[motor] = now + ((speed / (servoSpeedGlobal * 0.6)) * 1000) + 500;
-            // motorWorkdoneTimeArr[motor] = now +  6000;
+            motorWorkdoneTimeArr[motor] = now + speed * 1000.0 / servoSpeedGlobal + 500;
         }
 
     }
@@ -168,7 +166,7 @@ namespace nezhaV2 {
         while (targetAngle < 0) {
             targetAngle += 360
         }
-        motorDelay(motor, 360, 2)
+        motorDelay(motor, 0.5, 1)
         targetAngle %= 360
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
