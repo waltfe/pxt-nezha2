@@ -6,7 +6,12 @@ enum NezhaV2MovementDirection {
     //%block="counterclockwise"
     CCW = 2
 }
-
+enum NezhaV2ServoMotionMode {
+    //%block="clockwise"
+    CW = 2,
+    //%block="counterclockwise"
+    CCW = 3
+}
 enum NezhaV2SportsMode {
     //%block="degrees"
     Degree = 2,
@@ -16,14 +21,6 @@ enum NezhaV2SportsMode {
     Second = 3
 }
 
-enum NezhaV2ServoMotionMode {
-    //%block="clockwise"
-    CW = 2,
-    //%block="shortest path"
-    ShortPath = 1,
-    //%block="counterclockwise"
-    CCW = 3
-}
 
 enum NezhaV2MotorPostionLeft {
     //%block="M1"
@@ -86,13 +83,15 @@ enum NezhaV2MotorPostion {
     //%block="M4"
     M4 = 4
 }
+
+
 //% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
 namespace nezhaV2 {
     let i2cAddr: number = 0x10;
     let setMotorCombination = 0;
     let getMotorCombinationSpeed = 0;
     let motorspeedGlobal = 50
-    let servoSpeedGlobal = 150
+    let servoSpeedGlobal = 900
     let buf = pins.createBuffer(8)
 
     buf[0] = 0xFF;
@@ -121,13 +120,11 @@ namespace nezhaV2 {
         }
 
         if (motorFunction == NezhaV2SportsMode.Circle) {
-            motorWorkdoneTimeArr[motor] = now + (speed * 360 / (servoSpeedGlobal * 0.6)) * 1000;
-
+            motorWorkdoneTimeArr[motor] = now + speed * 360000.0 / servoSpeedGlobal + 500;
         } else if (motorFunction == NezhaV2SportsMode.Second) {
             motorWorkdoneTimeArr[motor] = now + (speed * 1000);
         } else if (motorFunction == NezhaV2SportsMode.Degree) {
-            motorWorkdoneTimeArr[motor] = now + ((speed / (servoSpeedGlobal * 0.6)) * 1000) + 500;
-            // motorWorkdoneTimeArr[motor] = now +  6000;
+            motorWorkdoneTimeArr[motor] = now + speed * 1000.0 / servoSpeedGlobal + 500;
         }
 
     }
@@ -171,12 +168,12 @@ namespace nezhaV2 {
     //% weight=406
     //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle"
     //% targetAngle.min=0  targetAngle.max=360
-    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2MovementDirection, targetAngle: number): void {
+    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number): void {
 
         while (targetAngle < 0) {
             targetAngle += 360
         }
-        motorDelay(motor, 360, 2)
+        motorDelay(motor, 0.5, 1)
         targetAngle %= 360
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
