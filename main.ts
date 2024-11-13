@@ -12,6 +12,13 @@ enum NezhaV2ServoMotionMode {
     //%block="counterclockwise"
     CCW = 3
 }
+
+enum NezhaV2ServoMotionState {
+    //%block="on"
+    ON = 1,
+    //%block="off"
+    OFF = 0
+}
 enum NezhaV2SportsMode {
     //%block="degrees"
     Degree = 2,
@@ -166,14 +173,24 @@ namespace nezhaV2 {
      */
     //% group="Basic functions"
     //% weight=406
-    //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle"
+    //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle || %ledstate  "
     //% targetAngle.min=0  targetAngle.max=360
-    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number): void {
+    //% inlineInputMode=inline
+
+    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number, ledstate: NezhaV2ServoMotionState = NezhaV2ServoMotionState.OFF ): void {
 
         while (targetAngle < 0) {
             targetAngle += 360
         }
-        motorDelay(motor, 0.5, 1)
+        if (ledstate)
+        {
+            motorDelay(motor, 0, 1)
+        }
+        else
+        {
+            motorDelay(motor, 0.5, 1)
+        }
+      
         targetAngle %= 360
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
