@@ -12,6 +12,13 @@ enum NezhaV2ServoMotionMode {
     //%block="counterclockwise"
     CCW = 3
 }
+
+enum NezhaV2DelayMode {
+    //%block="automatic delay"
+    AutoDelayStatus = 1,
+    //%block="no delay"
+    NoDelay = 0
+}
 enum NezhaV2SportsMode {
     //%block="degrees"
     Degree = 2,
@@ -139,11 +146,18 @@ namespace nezhaV2 {
      * @returns This function does not return any value.
      */
     //% group="Basic functions"
-    //% block="set %NezhaV2MotorPostion to run %NezhaV2MovementDirection %speed  %NezhaV2SportsMode"
+    //% block="set %NezhaV2MotorPostion to run %NezhaV2MovementDirection %speed  %NezhaV2SportsMode || %delayMode"
     //% inlineInputMode=inline
     //% weight=407 
-    export function motorSpeed(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number, motorFunction: NezhaV2SportsMode): void {
-        motorDelay(motor, speed, motorFunction);
+    export function motorSpeed(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number, motorFunction: NezhaV2SportsMode, delayMode: NezhaV2DelayMode = NezhaV2DelayMode.AutoDelayStatus): void {
+        if(delayMode)
+        {
+            motorDelay(motor, speed, motorFunction);
+        }
+        else
+        {
+            motorDelay(motor, 0, 1)
+        }
         let buf = pins.createBuffer(8);
         buf[0] = 0xFF;
         buf[1] = 0xF9;
@@ -166,14 +180,24 @@ namespace nezhaV2 {
      */
     //% group="Basic functions"
     //% weight=406
-    //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle"
+    //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle || %delayMode  "
     //% targetAngle.min=0  targetAngle.max=360
-    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number): void {
+    //% inlineInputMode=inline
+
+    export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number, delayMode: NezhaV2DelayMode = NezhaV2DelayMode.AutoDelayStatus ): void {
 
         while (targetAngle < 0) {
             targetAngle += 360
         }
-        motorDelay(motor, 0.5, 1)
+        if (delayMode)
+        {
+            motorDelay(motor, 0.5, 1)
+        }
+        else
+        {
+            motorDelay(motor, 0, 1)
+        }
+      
         targetAngle %= 360
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
