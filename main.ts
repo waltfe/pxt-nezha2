@@ -10,7 +10,9 @@ enum NezhaV2ServoMotionMode {
     //%block="clockwise"
     CW = 2,
     //%block="counterclockwise"
-    CCW = 3
+    CCW = 3,
+    //%block="shortest path"
+    ShortPath = 1
 }
 
 enum NezhaV2DelayMode {
@@ -94,25 +96,16 @@ enum NezhaV2MotorPostion {
 
 //% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
 namespace nezhaV2 {
+
     let i2cAddr: number = 0x10;
-    let setMotorCombination = 0;
-    let getMotorCombinationSpeed = 0;
-    let motorspeedGlobal = 50
     let servoSpeedGlobal = 900
-    let buf = pins.createBuffer(8)
+    let motorWorkdoneTimeArr = [0, 0, 0, 0];
+    // 组合积木块变量
+    let motorLeftGlobal = 0
+    let motorRightGlobal = 0
+    let degreeToDistance = 0
 
-    buf[0] = 0xFF;
-    buf[1] = 0xF9;
-    buf[2] = 0x00;
-    buf[3] = 0x00;
-    buf[4] = 0x00;
-    buf[5] = 0x00;
-    buf[6] = 0xF5;
-    buf[7] = 0x00;
-    pins.i2cWriteBuffer(i2cAddr, buf);
-
-    let motorWorkdoneTimeArr = [0, 0, 0, 0, 0];
-    function motorDelay(motor: NezhaV2MotorPostion, speed: number, motorFunction: NezhaV2SportsMode) {
+    export function motorDelay(motor: NezhaV2MotorPostion, speed: number, motorFunction: NezhaV2SportsMode) {
 
         let now = input.runningTime();
         let motorWorkdoneTime = motorWorkdoneTimeArr[motor];
@@ -183,7 +176,6 @@ namespace nezhaV2 {
     //% block="set %NezhaV2MotorPostion to rotate %NezhaV2MovementDirection at angle %targetAngle || %delayMode  "
     //% targetAngle.min=0  targetAngle.max=360
     //% inlineInputMode=inline
-
     export function goToAbsolutePosition(motor: NezhaV2MotorPostion, modePostion: NezhaV2ServoMotionMode, targetAngle: number, delayMode: NezhaV2DelayMode = NezhaV2DelayMode.AutoDelayStatus ): void {
 
         while (targetAngle < 0) {
@@ -213,12 +205,12 @@ namespace nezhaV2 {
     }
 
     /**
- * Starts the Nezha V2 motor.
- *
- * @param motor The position of the motor.
- * @param direction The direction of movement.
- * @returns This function does not return any value.
- */
+     * Starts the Nezha V2 motor.
+     *
+     * @param motor The position of the motor.
+     * @param direction The direction of movement.
+     * @returns This function does not return any value.
+     */
     //% group="Basic functions"
     //% weight=405
     //% block="setting %NezhaV2MotorPostion to start the motor in %NezhaV2MovementDirection"
@@ -293,7 +285,7 @@ namespace nezhaV2 {
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
-    function nezha2MotorSpeedCtrol(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number): void {
+    export function nezha2MotorSpeedCtrol(motor: NezhaV2MotorPostion, direction: NezhaV2MovementDirection, speed: number): void {
         motorDelay(motor, 0, 1)
         let buf = pins.createBuffer(8)
         buf[0] = 0xFF;
@@ -306,7 +298,6 @@ namespace nezhaV2 {
         buf[7] = 0x00;
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
-
 
     /**
      * Reads the absolute position of a servo motor.
@@ -408,9 +399,6 @@ namespace nezhaV2 {
 
     }
 
-    let motorLeftGlobal = 0
-    let motorRightGlobal = 0
-
     /**
      * Sets the motors to run to the target speeds.
      *
@@ -427,18 +415,29 @@ namespace nezhaV2 {
     }
 
     /**
-     * Sets the motion speed.
+     * Controls the combined movement of the Nezha V2 robot in vertical directions.
      *
-     * @param speed The speed of motion, measured in a specific numerical unit (defined according to the actual project requirements).
+     * @param verticallDirection The vertical direction, with values from the NezhaV2VerticallDirection enumeration.
      * @returns Does not return any value.
      */
     //% group="Application functions"
     //% weight=409
-    //%block="set the speed to %speed \\%"
+    //%block="Set %speed\\% speed and move %NezhaV2VerticallDirection"
     //% speed.min=0  speed.max=100
-    export function setMotionSpeed(speed: number): void {
-        motorspeedGlobal = speed
+    export function combinationMotorNezhaV2VerticallDirectionMove(speed:number, verticallDirection: NezhaV2VerticallDirection): void {
+        switch (verticallDirection) {
+            case NezhaV2VerticallDirection.Up:
+                nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CCW, speed)
+                nezha2MotorSpeedCtrol(motorRightGlobal, NezhaV2MovementDirection.CW, speed)
+                break
+            case NezhaV2VerticallDirection.Down:
+                nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CW, speed)
+                nezha2MotorSpeedCtrol(motorRightGlobal, NezhaV2MovementDirection.CCW, speed)
+                break
+        }
+
     }
+
 
     /**
      * Stops the combined motors.
@@ -454,30 +453,6 @@ namespace nezhaV2 {
     }
 
 
-    /**
-     * Controls the combined movement of the Nezha V2 robot in vertical directions.
-     *
-     * @param verticallDirection The vertical direction, with values from the NezhaV2VerticallDirection enumeration.
-     * @returns Does not return any value.
-     */
-    //% group="Application functions"
-    //% weight=405
-    //%block="move %NezhaV2VerticallDirection"
-    export function combinationMotorNezhaV2VerticallDirectionMove(verticallDirection: NezhaV2VerticallDirection): void {
-        switch (verticallDirection) {
-            case NezhaV2VerticallDirection.Up:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CCW, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, NezhaV2MovementDirection.CW, motorspeedGlobal)
-                break
-            case NezhaV2VerticallDirection.Down:
-                nezha2MotorSpeedCtrol(motorLeftGlobal, NezhaV2MovementDirection.CW, motorspeedGlobal)
-                nezha2MotorSpeedCtrol(motorRightGlobal, NezhaV2MovementDirection.CCW, motorspeedGlobal)
-                break
-        }
-
-    }
-
-    let degreeToDistance = 0
     //% group="Application functions"
     //% weight=404
     //%block="Rotate the motor once and set it to %far %Unit"
