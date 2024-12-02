@@ -93,6 +93,13 @@ enum NezhaV2MotorPostion {
     M4 = 4
 }
 
+enum NezhaV2AccelerationMode {
+    //%block="step acceleration"
+    SA = 0,
+    //%block="linear acceleration"
+    LA = 1
+}
+
 
 //% color=#ff0011  icon="\uf06d" block="nezhaV2" blockId="nezhaV2"
 namespace nezhaV2 {
@@ -128,7 +135,22 @@ namespace nezhaV2 {
         }
 
     }
-
+    //% group="Basic functions"
+    //% block="set %motor as %mode mode"
+    //% inlineInputMode=inline
+    //% weight=999 
+    export function setAccelerationMode(motor: NezhaV2MotorPostion, mode: NezhaV2AccelerationMode): void {
+        let buf = pins.createBuffer(8);
+        buf[0] = 0xFF;
+        buf[1] = 0xF9;
+        buf[2] = motor;
+        buf[3] = mode;
+        buf[4] = 0x20;
+        buf[5] = 0;
+        buf[6] = 0;
+        buf[7] = 0;
+        pins.i2cWriteBuffer(i2cAddr, buf);
+    }
     /**
      * Sets the speed and direction of the motor.
      *
